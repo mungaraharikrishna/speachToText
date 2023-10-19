@@ -1,0 +1,33 @@
+<div class="d-flex justify-content-center align-items-center">
+    <div class="d-flex flex-column">
+        <img *ngFor="let item of avatar; index as i" [src]="item.icon" [alt]="item.name" class="py-3 my-2 img-thumbnail" width="250" height="250" [ngClass]="{'active': selectedIndex == i}" (click)="selectImg(item, i)">
+    </div>
+    <div class="m-3 p-3 border border-2">
+        <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" width="200" height="500" viewBox="0 0 200 500" #svg>
+            <image id="avatar_svg__c" xlink:href="../../assets/AvatarImages/avtar2.png" width="200" height="500"  />
+            <image id="avatar_svg__d" xlink:href="../../assets/visemes/viseme_id_0.svg"  />
+        </svg>
+    </div>
+    
+    <div class="d-flex flex-column w-100">
+        <div class="py-2">
+            <label for="">Language</label>
+            <select [(ngModel)]="selectedVal" class="form-control">
+                <!-- <option *ngFor="let item of FemaleSpeakers" [value]="item.privShortName">{{item.privDisplayName}}</option> -->
+                <option *ngFor="let item of FemaleSpeakers" [value]="item.privShortName">{{item.privShortName}}</option>
+            </select>
+        </div>
+        <div class="py-2">
+            <label for="">Text</label>
+            <textarea [(ngModel)]="textToSpeak" class="form-control"></textarea>
+        </div>
+        <div class="">
+            <!-- <button class="btn btn-primary mr-2" (click)="startRecognition()">Start Recognition</button>
+            <button class="btn btn-primary mr-2" (click)="speechService.stopRecognition()">stop Recognition</button> -->
+            <button class="btn btn-outline-primary" (click)="startSpeek()">Start Speek</button>
+            <button class="btn btn-primary mx-2" (click)="createTalk()">Create Talk</button>
+            <button class="btn btn-primary mx-2" (click)="getAllTalks()">Get All Taks</button>
+            <!-- <div>{{ speechService.recognitionResult }}</div> -->
+        </div>
+    </div>
+</div>

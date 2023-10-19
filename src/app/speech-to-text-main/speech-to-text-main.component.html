@@ -1,0 +1,67 @@
+<svg style="display: none;">
+    <defs>
+        <symbol viewBox="0 0 66 66" id="tale" xmlns="http://www.w3.org/2000/svg">
+            <path d="M64.078 0.956055C73.9285 54.7461 3.33223 70.9614 0.292222 64.746C-3.71428 55.3258 34.9269 53.4396 27.5896 0.956055H64.078Z" />
+        </symbol>
+    </defs>
+</svg>
+<!-- Chat body section -->
+<div class="chatwindow-body h-100" >
+    <button type="button" class="btn btn-sm btn-outline-primary" (click)="toggleMic()" *ngIf="!isReady">
+        <i [ngClass]="!isListening ? 'fa-regular fa-microphone-lines' : 'fa-regular fa-microphone-lines-slash'"></i>
+    </button>
+    <div class="chatwindow-scroller" #scroller *ngIf="isReady">
+        <div class="chatwindow-holder" #scrollerContent>
+            <ng-container *ngFor="let item of history; index as i">
+                <ng-container *ngTemplateOutlet="row;context: {$implicit: item, index: i}"></ng-container>
+            </ng-container>
+            <ng-container *ngIf="isLoading">
+                <ng-container *ngTemplateOutlet="row;context: {$implicit: { type: 'answer', message: '', template: spinner }}"></ng-container>
+            </ng-container>
+        </div>
+    </div>
+</div>
+<!-- Chat footer section -->
+<div class="chatwindow-footer" *ngIf="isReady">
+    <!-- <ng-container *ngIf="onUpload?.observed">
+        <label class="chatwindow-attachment" [ngStyle]="{'pointer-events': isLoading ? 'none' : 'auto'}">
+            <button type="button" class="chatwindow-btn fa-regular fa-paperclip" [ngClass]="{'active': attachments.length}"></button>
+            <input type="file" #inputFile [accept]="acceptedFiles" multiple (change)="onUploadFn($event)" #files />
+        </label>
+        <ng-container *ngIf="attachments.length && isClearAttch">
+            <button type="button" class="chatwindow-btn fa-regular fa-trash cursor-pointer" title="clear attachments" (click)="onClearFn(files)"></button>
+        </ng-container>
+    </ng-container> -->
+    <textarea [(ngModel)]="service.text" class="form-control" rows="1" cols="30" [placeholder]="'Say hello'" #input (keypress)="onKeyup($event,input)" [disabled]="isLoading" autofocus></textarea>
+    <!-- <app-speech-mic *ngIf="isShowMic"></app-speech-mic> -->
+    <button type="button" class="btn btn-sm btn-outline-primary" (click)="toggleMic()">
+        <i [ngClass]="!isListening ? 'fa-regular fa-microphone-lines' : 'fa-regular fa-microphone-lines-slash'"></i>
+    </button>
+    <button type="button" title="Send" class="chatwindow-btn fa-regular fa-send cursor-pointer" (click)="onClick($event,input)" [disabled]="isLoading"></button>
+</div>
+<!-- Chat body section template -->
+<ng-template #row let-item let-index="index">
+    <div class="message" [ngClass]="item.type =='question' ? 'message-q':'message-a'">
+        <div acronym>
+            <i class="fa-lg" [ngClass]="item.type == 'answer' ? 'fa-regular fa-message-bot' :'fa-regular fa-user'"></i>
+        </div>
+        <div class="message-buble">
+            <!-- <svg>
+                <use href="#tale"></use>
+            </svg> -->
+            <div [innerHTML]="item.message"></div>
+            <a *ngIf="item.link" [href]="item.link" target="_blank">{{item.link}}</a>
+            <ng-container *ngIf="item.template">
+                <ng-container *ngTemplateOutlet="item.template;context: {$implicit: item, index: index}"></ng-container>
+            </ng-container>
+        </div>
+    </div>
+</ng-template>
+<!-- Loader section -->
+<ng-template #spinner>
+    <div class="chatwindow-spinner">
+        <span></span>
+        <span></span>
+        <span></span>
+    </div>
+</ng-template>

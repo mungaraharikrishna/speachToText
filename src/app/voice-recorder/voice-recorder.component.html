@@ -1,0 +1,5 @@
+<h1>Voice Recorder</h1>
+<button type="button" (click)="start()">Start</button>
+<button type="button" (click)="stop()">Stop</button>
+<br>
+<audio *ngIf="audioUrl" controls [src]="audioUrl"></audio>

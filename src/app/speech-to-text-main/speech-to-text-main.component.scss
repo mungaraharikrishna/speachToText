@@ -1,0 +1,238 @@
+:host {
+    --chatwindow-primary: var(blue);
+    --chatwindow-background: var(blue);
+    --chatwindow-foreground: var(blue);
+    --chatwindow-border: var(blue);
+    --chatwindow-text: var(blue);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--chatwindow-border);
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background-color: var(--chatwindow-background);
+
+    .chatwindow-body {
+        flex: 1 1 auto;
+        height: 0px;
+
+        ::ng-deep .chatwindow-scroller {
+            height: 100%;
+            width: 100%;
+
+            .chatwindow-holder {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                gap: 1.5rem;
+                min-height: 100%;
+                padding: 20px;
+            }
+        }
+    }
+
+    .chatwindow-spinner {
+        display: flex;
+        align-items: center;
+        height: 20px;
+
+        span {
+            display: block;
+            height: 10px;
+            width: 10px;
+            border-radius: 100%;
+            background-color: var(--chatwindow-primary);
+            margin-right: 4px;
+            animation-name: dotAnimation;
+            animation-duration: 600ms;
+            animation-timing-function: linear;
+            animation-fill-mode: both;
+            animation-direction: alternate;
+            animation-iteration-count: infinite;
+            transform: scale(0);
+
+            &:last-child {
+                margin-right: 0px;
+            }
+
+            &:nth-child(2) {
+                animation-delay: 200ms;
+            }
+
+            &:nth-child(3) {
+                animation-delay: 400ms;
+            }
+        }
+
+        @keyframes dotAnimation {
+            to {
+                transform: scale(1);
+            }
+        }
+    }
+
+    .chatwindow-footer {
+        position: relative;
+        border-top: 1px solid var(--chatwindow-border);
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 1rem 1rem;
+
+        &::after {
+            content: '';
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            background-color: var(--chatwindow-foreground);
+            opacity: .5;
+            z-index: 0;
+        }
+
+        * {
+            z-index: 1;
+            position: relative;
+        }
+
+        textarea {
+            background-color: var(--chatwindow-background);
+            flex: 1 1 auto;
+            font-family: inherit;
+            border: 1px solid gray;
+            padding: 0px 1rem;
+            height: 40px;
+            line-height: 40px - 2px;
+            font-size: 13px;
+            border-radius: 9999px;
+            // appearance: none;
+            resize: none;
+            // outline: none;
+        }
+    }
+
+    .chatwindow-btn {
+        height: 40px;
+        line-height: 40px;
+        width: 40px;
+        text-align: center;
+        border: 0px;
+        border-radius: 9999px;
+        background: none;
+        font-size: 20px;
+        color: var(--chatwindow-text);
+        position: relative;
+
+        &:active {
+            color: var(--chatwindow-primary);
+            opacity: 1;
+            cursor: pointer;
+        }
+
+        &::after {
+            display: none;
+            content: '';
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            height: 6px;
+            width: 6px;
+            border-radius: 100%;
+            background-color: var(--chatwindow-primary);
+        }
+
+        &.active {
+            &::after {
+                display: block;
+            }
+        }
+    }
+
+    .chatwindow-attachment {
+        display: inline-block;
+        position: relative;
+
+        input {
+            opacity: 0;
+            position: absolute;
+            left: 0px;
+            top: 0px;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+        }
+    }
+
+    [acronym] {
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 13px;
+        color: white;
+        width: 30px;
+        height: 30px;
+        border-radius: 9999px;
+        background-color: #666;
+
+        &:before {
+            content: attr(acronym);
+            display: block;
+            overflow: hidden;
+            max-width: 2ch;
+            font-family: 'Courier New', Courier, monospace;
+            white-space: nowrap;
+        }
+    }
+
+    .message {
+        display: flex;
+        align-items: end;
+        gap: 0.5rem;
+
+        .message-buble {
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 10px;
+            font-size: 13px;
+            line-height: 20px;
+
+            svg {
+                position: absolute;
+                bottom: 0px;
+                width: 12px;
+                height: 12px;
+            }
+        }
+
+        &.message-q {
+            flex-direction: row-reverse;
+
+            [acronym],
+            .message-buble {
+                background-color: var(--chatwindow-primary);
+                color: rgb(31, 30, 30) !important;
+
+                svg {
+                    right: -5px;
+                    fill: var(--chatwindow-primary);
+                    transform: scaleX(-1);
+                }
+            }
+        }
+
+        &.message-a {
+
+            [acronym],
+            .message-buble {
+                background-color: var(--chatwindow-foreground);
+                color: var(--chatwindow-text);
+
+                svg {
+                    left: -5px;
+                    fill: var(--chatwindow-foreground);
+                }
+            }
+        }
+    }
+}

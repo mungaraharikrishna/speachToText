@@ -1,0 +1,26 @@
+<h1>Text to speech</h1>
+<textarea
+  cols="30"
+  rows="10"
+  [(ngModel)]="service.text"
+  (keydown.enter)="speak()"
+></textarea>
+
+<br />
+
+<label for="rate">Rate:</label>
+<input name="rate" type="range" min="0" max="3" step="0.1" [(ngModel)]="rate" />
+<br />
+<label for="pitch">Pitch:</label>
+<input name="pitch" type="range" min="0" max="2" step="0.1" [(ngModel)]="pitch"/>
+
+<select [(ngModel)]="selectedVoice" (change)="speak()">
+  <option *ngFor="let voice of voices" [ngValue]="voice">
+    {{ voice.name }} {{ voice.lang }}
+  </option>
+</select>
+
+<button (click)="speak()">Speak</button>
+<button (click)="pause()">Pause</button>
+<button (click)="resume()">Resume</button>
+<button (click)="cancel()">Cancel</button>

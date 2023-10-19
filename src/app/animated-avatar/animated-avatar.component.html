@@ -1,0 +1,19 @@
+<!-- <div id="avatar-container">
+    <canvas #avatarCanvas id="avatarCanvas" width="200" height="200"></canvas>
+    <div id="speechInput">
+        <textarea #textToSpeak id="textToSpeak" placeholder="Enter text"></textarea>
+        <button type="button" (click)="speak()">Speak</button>
+    </div>
+</div> -->
+<div id="avatar-container">
+    <canvas #avatarCanvas width="200" height="200"></canvas>
+    <div class="d-flex">
+        <video crossorigin="anonymous" playsinline="playsinline" webkit-playsinline="webkit-playsinline" preload="auto" autoplay="" loop="" src="https://humanchat.net/chat_avatars/180_amanda_srubs_idle_limited.webm" style="height: 300px;"></video>
+        <div class="d-flex w-100 flex-column gap-2">
+            <textarea rows="3" class="form-control" [(ngModel)]="textToSpeak" placeholder="Enter text"></textarea>
+            <div class="d-grid">
+                <button class="btn btn-block btn-primary" (click)="speak()">Speak</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,13 @@
+<h1>
+    Start editing to see some magic happen
+</h1>
+
+
+<form id="gSearch" method="GET" action="https://www.google.com/search" #gSearch>
+    <div id="voicesearch">
+        <input #searchKey name="q" type="hidden" />
+        <button (click)="voiceSearch()" id="icon-mic">mic</button>
+    </div>
+</form>
+
+<div id="text"></div>
