@@ -10,16 +10,16 @@ interface IMap {
   providedIn: 'root'
 })
 export class AzureSpeechService {
-  viseme_id_0 = "../../assets/visemes/viseme_id_0.svg";
-  viseme_id_1 = "../../assets/visemes/viseme_id_1.svg";
-  viseme_id_2 = "../../assets/visemes/viseme_id_2.svg";
-  viseme_id_3 = "../../assets/visemes/viseme_id_3.svg";
-  viseme_id_4 = "../../assets/visemes/viseme_id_4.svg";
-  viseme_id_5 = "../../assets/visemes/viseme_id_5.svg";
-  viseme_id_6 = "../../assets/visemes/viseme_id_6.svg";
-  viseme_id_7 = "../../assets/visemes/viseme_id_7.svg";
-  viseme_id_8 = "../../assets/visemes/viseme_id_8.svg";
-  viseme_id_9 = "../../assets/visemes/viseme_id_9.svg";
+  viseme_id_0 = "../../assets/visemes/viseme_id_0.svg"
+  viseme_id_1 = "../../assets/visemes/viseme_id_1.svg"
+  viseme_id_2 = "../../assets/visemes/viseme_id_2.svg"
+  viseme_id_3 = "../../assets/visemes/viseme_id_3.svg"
+  viseme_id_4 = "../../assets/visemes/viseme_id_4.svg"
+  viseme_id_5 = "../../assets/visemes/viseme_id_5.svg"
+  viseme_id_6 = "../../assets/visemes/viseme_id_6.svg"
+  viseme_id_7 = "../../assets/visemes/viseme_id_7.svg"
+  viseme_id_8 = "../../assets/visemes/viseme_id_8.svg"
+  viseme_id_9 = "../../assets/visemes/viseme_id_9.svg"
   viseme_id_10 = "../../assets/visemes/viseme_id_10.svg";
   viseme_id_11 = "../../assets/visemes/viseme_id_11.svg";
   viseme_id_12 = "../../assets/visemes/viseme_id_12.svg";
@@ -126,7 +126,7 @@ export class AzureSpeechService {
         let img = svg.querySelector('#avatar_svg__d') as HTMLImageElement;
         this.visemes_arr.forEach((e, index) => {
           var duration = e.audioOffset / 10000;
-          if (index == (this.visemes_arr.length - 1) && e.visemeId != 0) { 
+          if (index == (this.visemes_arr.length - 1) && e.visemeId != 0) {
             e.privVisemeId = 0;
           }
           setTimeout(() => {
@@ -162,5 +162,50 @@ export class AzureSpeechService {
 
   parseDomFromString(html: any) {
     return new DOMParser().parseFromString(html, "text/xml").querySelector("svg");
+  }
+
+  public convertSpeechToAudio(onAudioAvailable: (audio: ArrayBuffer) => void): void {
+    const audioConfig = SpeechSDK.AudioConfig.fromDefaultMicrophoneInput();
+    this.recognizer = new SpeechSDK.SpeechRecognizer(this.speechConfig, audioConfig);
+
+    // Listen for audio events
+    this.recognizer.recognized = (sender, event) => {
+      if (event.result.reason === SpeechSDK.ResultReason.RecognizedSpeech) {
+        console.log('Recognized Text:', event.result.text);
+
+        // Convert the recognized text to audio (you need to implement this part)
+        const audio = this.textToAudio(event.result.text);
+
+        // Invoke the callback with the audio data
+        onAudioAvailable(audio);
+      } else {
+        console.error('Speech recognition error:', event.result.errorDetails);
+      }
+    };
+
+    this.recognizer.startContinuousRecognitionAsync();
+  }
+
+  private textToAudio(text: string): ArrayBuffer {
+    // Implement the conversion of text to audio here (e.g., using a text-to-speech API)
+    // Return the audio data as an ArrayBuffer
+    const buffer = new ArrayBuffer(text.length);
+    const view = new Uint8Array(buffer);
+    for (let i = 0; i < text.length; i++) {
+      view[i] = text.charCodeAt(i);
+    }
+    return buffer;
+    const textEncoder = new TextEncoder();
+
+    // Encode the text to ArrayBuffer
+    const textEncoded = textEncoder.encode(text);
+    console.log(textEncoded)
+    return textEncoded;
+  }
+
+  public stopConversion(): void {
+    if (this.recognizer) {
+      this.recognizer.stopContinuousRecognitionAsync();
+    }
   }
 }

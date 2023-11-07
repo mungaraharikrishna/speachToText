@@ -1,5 +1,18 @@
-<h1>Voice Recorder</h1>
-<button type="button" (click)="start()">Start</button>
-<button type="button" (click)="stop()">Stop</button>
-<br>
-<audio *ngIf="audioUrl" controls [src]="audioUrl"></audio>
+<div class="card">
+    <div class="card-header">
+        <h4>Voice Recorder</h4>
+    </div>
+    <div class="card-body">
+        <button type="button" class="btn btn-outline-primary mx-2" (click)="start()">Start</button>
+        <button type="button" class="btn btn-primary" (click)="stop()">Stop</button>
+        <div class="py-3">
+            <audio *ngIf="audioUrl" controls [src]="audioUrl"></audio>
+        </div>
+    </div>
+    <div class="card-body">
+        <button (click)="convertSpeechToAudio()">Convert Speech to Audio</button>
+        
+    </div>
+</div>
+
+<video #target class="video-js" controls muted playsinline preload="none"></video>

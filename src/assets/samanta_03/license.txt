@@ -1,0 +1,11 @@
+Model Information:
+* title:	Samanta 03
+* source:	https://sketchfab.com/3d-models/samanta-03-7a5bae6adb274523994d488b2e4f19e1
+* author:	flaviomarialva (https://sketchfab.com/flaviomarialva)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Samanta 03" (https://sketchfab.com/3d-models/samanta-03-7a5bae6adb274523994d488b2e4f19e1) by flaviomarialva (https://sketchfab.com/flaviomarialva) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

@@ -18,6 +18,7 @@ import { AnimatedAvatarComponent } from './animated-avatar/animated-avatar.compo
 import { AzureAnimatedAvatarComponent } from './azure-animated-avatar/azure-animated-avatar.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ThreeAvatarComponent } from './three-avatar/three-avatar.component';
+import { StreamingAvatarComponent } from './streaming-avatar/streaming-avatar.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { ThreeAvatarComponent } from './three-avatar/three-avatar.component';
     VoiceWakeupComponent,
     AnimatedAvatarComponent,
     AzureAnimatedAvatarComponent,
-    ThreeAvatarComponent
+    ThreeAvatarComponent,
+    StreamingAvatarComponent
   ],
   imports: [
     BrowserModule,

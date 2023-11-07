@@ -1,73 +1,75 @@
-import { Component, NgZone } from '@angular/core';
+import { Component, ElementRef, NgZone, ViewChild } from '@angular/core';
 import * as THREE from 'three';
-import GLTFLoader from 'three-gltf-loader';
+// import GLTFLoader from 'three-gltf-loader';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 @Component({
   selector: 'app-three-avatar',
   templateUrl: './three-avatar.component.html',
   styleUrls: ['./three-avatar.component.scss']
 })
 export class ThreeAvatarComponent {
-  private scene!: THREE.Scene;
-  private camera!: THREE.PerspectiveCamera;
-  private renderer!: THREE.WebGLRenderer;
-  private avatar!: THREE.Object3D; // Change the type to Object3D
+  @ViewChild('rendererContainer', { static: true }) rendererContainer!: ElementRef;
+  public scene!: THREE.Scene;
+  public camera!: THREE.PerspectiveCamera;
+  public renderer!: any;
+  public controls!: OrbitControls;
+  public loader: GLTFLoader;
 
-  constructor(private ngZone: NgZone) { }
+  // public camera
+  constructor() {
+    this.loader = new GLTFLoader()
 
-  ngOnInit() {
-    // this.initThree();
-    // this.loadAvatar();
-    // this.animate();
   }
 
-  ngOnDestroy() {
-    // Clean up resources
+  ngAfterViewInit(): void {
+    this.initThree();
   }
 
-  private initThree() {
+  initThree() {
+    // Initialize scene
     this.scene = new THREE.Scene();
+    this.scene.background = new THREE.Color(0xffffff)
+
+    // Initialize camera
     this.camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    this.renderer = new THREE.WebGLRenderer();
+    this.camera.position.set(- 1.8, 0.6, 2.7);
+
+    // Initialize renderer
+    this.renderer = new THREE.WebGLRenderer({ antialias: true });
     this.renderer.setSize(window.innerWidth, window.innerHeight);
-    document.querySelector('div')?.appendChild(this.renderer.domElement);
+    this.rendererContainer.nativeElement.appendChild(this.renderer.domElement);
 
-    this.camera.position.z = 5;
-
-    window.addEventListener('resize', () => this.onWindowResize(), false);
-  }
-
-  private loadAvatar() {
-    const loader = new GLTFLoader();
-    loader.load(
-      'path/to/your/avatar.gltf', // Replace with the path to your GLTF model
-      (gltf: any) => {
-        this.avatar = gltf.scene;
-        this.scene.add(this.avatar);
-      },
-      undefined,
-      (error: any) => {
-        console.error('Error loading avatar', error);
-      }
-    );
-  }
-
-  private animate() {
-    this.ngZone.runOutsideAngular(() => {
-      const animateFn = () => {
-        requestAnimationFrame(animateFn);
-        if (this.avatar) {
-          this.avatar.rotation.x += 0.01;
-          this.avatar.rotation.y += 0.01;
-        }
-        this.renderer.render(this.scene, this.camera);
-      };
-      animateFn();
+    // Initialize OrbitControls
+    this.controls = new OrbitControls(this.camera, this.renderer.domElement);
+    this.controls.addEventListener('change', () => {
+      this.renderer.render(this.scene, this.camera);
     });
-  }
+    this.controls.enableZoom = true
+    this.controls.update();
 
-  private onWindowResize() {
-    this.camera.aspect = window.innerWidth / window.innerHeight;
-    this.camera.updateProjectionMatrix();
-    this.renderer.setSize(window.innerWidth, window.innerHeight);
+
+    // Load 3D model
+    this.loader.load('../../assets/samanta_03.glb', (gltf) => {
+      const model = gltf.scene;
+      model.position.set(0, 1, 0);
+      this.scene.add(model);
+
+      // Add ambient light
+      const ambientLight = new THREE.AmbientLight(0xffffff);
+      this.scene.add(ambientLight);
+
+      // Start the animation loop
+      const animate = () => {
+        requestAnimationFrame(animate);
+        this.controls.update();
+        this.renderer.render(this.scene, this.camera);
+        console.log("running");
+      };
+      animate();
+
+    }, undefined, (error) => {
+      console.error('Error loading GLTF:', error);
+    });
   }
 }

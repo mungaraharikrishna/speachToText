@@ -3,6 +3,7 @@ import { SpeechConfig, SpeechRecognizer, AudioConfig, ResultReason } from 'micro
 import { environment } from 'src/environments/environment.development';
 import { AzureSpeechService } from '../services/azure-speech.service';
 import { ApiService } from '../services/api.service';
+
 @Component({
   selector: 'app-azure-animated-avatar',
   templateUrl: './azure-animated-avatar.component.html',
@@ -44,6 +45,7 @@ export class AzureAnimatedAvatarComponent {
       } else {
         this.FemaleSpeakers = voices.privVoices;
         this.selectedVal = this.FemaleSpeakers[0].privShortName;
+        // this.startSpeek()
       }
     })
   }

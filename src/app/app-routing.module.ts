@@ -7,6 +7,7 @@ import { AnimatedAvatarComponent } from './animated-avatar/animated-avatar.compo
 import { AzureAnimatedAvatarComponent } from './azure-animated-avatar/azure-animated-avatar.component';
 import { ThreeAvatarComponent } from './three-avatar/three-avatar.component';
 import { VoiceRecorderComponent } from './voice-recorder/voice-recorder.component';
+import { StreamingAvatarComponent } from './streaming-avatar/streaming-avatar.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'speech-to-textv1', pathMatch: 'full' },
@@ -15,6 +16,7 @@ const routes: Routes = [
   { path: 'voice-wakeup', component: VoiceWakeupComponent },
   { path: 'avatar', component: AnimatedAvatarComponent },
   { path: 'azure-avatar', component: AzureAnimatedAvatarComponent },
+  { path: 'streaming-avatar', component: StreamingAvatarComponent },
   { path: 'three-avatar', component: ThreeAvatarComponent },
 ];
 
