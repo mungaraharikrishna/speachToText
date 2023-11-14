@@ -14,7 +14,7 @@ const RTCPeerConnection = (
   styleUrls: ['./streaming-avatar.component.scss']
 })
 export class StreamingAvatarComponent {
-  @ViewChild('talkvideo', {static: false}) talkVideo!: ElementRef<any>
+  @ViewChild('talkvideo', { static: false }) talkVideo!: ElementRef<any>
   connectionObj: any = {};
   statsIntervalId: any;
   videoIsPlaying: any;
@@ -24,12 +24,20 @@ export class StreamingAvatarComponent {
   constructor(private apiService: ApiService) { }
 
   ngOnInit() {
-    this.createConnection()
+    setTimeout(() => {
+
+      this.createConnection()
+    },1000)
   }
 
   createConnection() {
+    if (this.peerConnection && this.peerConnection.connectionState === 'connected') {
+      return;
+    }
+    this.stopAllStreams();
+    this.closePC();
     let sendObj = {
-      source_url: 'https://naction.in/wp-content/uploads/2023/01/Palki-S-Upadhyay-.jpg'
+      source_url: 'https://naction.in/wp-content/uploads/2022/07/Neha-Batham.jpg'
     }
     this.apiService.createConnection(sendObj).subscribe(async res => {
       console.log(res)
@@ -43,10 +51,13 @@ export class StreamingAvatarComponent {
         this.apiService.sdpTalkStream(sendObj, this.connectionObj.id).subscribe(async res => {
           console.log(res)
           if (res) {
-            
+
           }
         })
       }
+    }, err => {
+      this.stopAllStreams();
+      this.closePC();
     })
   }
 
@@ -58,7 +69,9 @@ export class StreamingAvatarComponent {
       this.peerConnection.addEventListener('icecandidate', (event: RTCPeerConnectionIceEvent) => {
         this.onIceCandidate(event);
       }, true);
-      // this.peerConnection.addEventListener('iceconnectionstatechange', onIceConnectionStateChange, true);
+      this.peerConnection.addEventListener('iceconnectionstatechange', () => {
+        this.onIceConnectionStateChange();
+      }, true);
       // this.peerConnection.addEventListener('connectionstatechange', onIceConnectionStateChange, true);
       // this.peerConnection.addEventListener('signalingstatechange', onSignalingStateChange, true);
       this.peerConnection.addEventListener('track', (event: RTCTrackEvent) => {
@@ -82,8 +95,11 @@ export class StreamingAvatarComponent {
     throw new Error('Function not implemented.');
   }
 
-  onIceConnectionStateChange(peerConnection: RTCPeerConnection, ev: Event) {
-    throw new Error('Function not implemented.');
+  onIceConnectionStateChange() {
+    if (this.peerConnection?.iceConnectionState === 'failed' || this.peerConnection?.iceConnectionState === 'closed') {
+      this.stopAllStreams();
+      this.closePC();
+    }
   }
 
   onSignalingStateChange(peerConnection: RTCPeerConnection, ev: Event) {
@@ -104,7 +120,7 @@ export class StreamingAvatarComponent {
       this.apiService.iceTalkStream(sendObj, this.connectionObj.id).subscribe(async res => {
         console.log(res)
         if (res) {
-          
+
         }
       })
     }
@@ -150,20 +166,49 @@ export class StreamingAvatarComponent {
       this.talkVideo.nativeElement.srcObject = undefined;
       this.talkVideo.nativeElement.src = '../../assets/idle.mp4';
       this.talkVideo.nativeElement.loop = true;
-    }, 1000)
+    }, 500)
+  }
+
+  stopAllStreams() {
+    if (this.talkVideo.nativeElement.srcObject) {
+      console.log('stopping video streams');
+      this.talkVideo.nativeElement.srcObject.getTracks().forEach((track: any) => track.stop());
+      this.talkVideo.nativeElement.srcObject = null;
+    }
+  }
+
+  closePC() {
+    let pc = this.peerConnection;
+    if (!pc) return;
+    console.log('stopping peer connection');
+    pc.close();
+    pc.removeEventListener('icecandidate', (event: RTCPeerConnectionIceEvent) => {
+      this.onIceCandidate(event);
+    }, true);
+    pc.removeEventListener('iceconnectionstatechange', () => {
+      this.onIceConnectionStateChange();
+    }, true);
+    pc.removeEventListener('track', (event: RTCTrackEvent) => {
+      this.onTrack(event);
+    }, true);
+    clearInterval(this.statsIntervalId);
+    console.log('stopped peer connection');
+    if (pc === this.peerConnection) {
+      this.peerConnection = undefined;
+    }
   }
 
   setVideoElement(stream: any) {
     if (!stream) return;
     this.talkVideo.nativeElement.srcObject = stream;
     this.talkVideo.nativeElement.loop = false;
-  
+
     // safari hotfix
     if (this.talkVideo.nativeElement.paused) {
       this.talkVideo.nativeElement
         .play()
-        .then((_res: any) => {})
-        .catch((e: any) => {});
+        .then((_res: any) => { })
+        .catch((e: any) => { });
     }
   }
 
@@ -184,7 +229,7 @@ export class StreamingAvatarComponent {
     this.apiService.avatarTalkStream(sendObj, this.connectionObj.id).subscribe(async res => {
       console.log(res)
       if (res) {
-        
+
       }
     })
   }

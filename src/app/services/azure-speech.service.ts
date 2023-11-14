@@ -32,9 +32,11 @@ export class AzureSpeechService {
   viseme_id_19 = "../../assets/visemes/viseme_id_19.svg";
   viseme_id_20 = "../../assets/visemes/viseme_id_20.svg";
   viseme_id_21 = "../../assets/visemes/viseme_id_21.svg";
+  player!: SpeechSDK.SpeakerAudioDestination
+  audioConfig!: SpeechSDK.AudioConfig;
   speechConfig: SpeechSDK.SpeechConfig;
   recognizer!: SpeechSDK.SpeechRecognizer;
-  synthesizer!: SpeechSDK.SpeechSynthesizer;
+  synthesizer!: SpeechSDK.SpeechSynthesizer | any;
   visemes_arr: any[] = [];
   recognitionResult = ''
   visemeMap: IMap = {
@@ -62,9 +64,11 @@ export class AzureSpeechService {
     21: this.viseme_id_21,
   };
   constructor() {
+    this.player = new SpeechSDK.SpeakerAudioDestination();
+    this.audioConfig = SpeechSDK.AudioConfig.fromSpeakerOutput(this.player)
     // Set up the Speech SDK configuration (replace with your own subscription key and region)
     this.speechConfig = SpeechSDK.SpeechConfig.fromSubscription(environment.SpeechKey, environment.SpeechRegion);
-    this.synthesizer = new SpeechSDK.SpeechSynthesizer(this.speechConfig);
+    this.synthesizer = new SpeechSDK.SpeechSynthesizer(this.speechConfig, this.audioConfig);
   }
 
   initializeSpeechRecognizer(): void {
@@ -74,11 +78,11 @@ export class AzureSpeechService {
 
   startRecognition(): void {
     if (this.recognizer) {
-      this.recognizer.recognizing = (sender, event) => {
+      this.recognizer.recognizing = (sender: any, event: any) => {
         console.log('Recognizing:', event.result.text);
       };
 
-      this.recognizer.recognized = (sender, event) => {
+      this.recognizer.recognized = (sender: any, event: any) => {
         if (event.result.reason === SpeechSDK.ResultReason.RecognizedSpeech) {
           console.log('Recognized Text:', event.result.text);
           this.recognitionResult = event.result.text
@@ -99,7 +103,7 @@ export class AzureSpeechService {
         () => {
           console.log('Speech recognition stopped.');
         },
-        (error) => {
+        (error: any) => {
           console.error('Error stopping speech recognition:', error);
         }
       );
@@ -107,7 +111,6 @@ export class AzureSpeechService {
   }
 
   speak(text: string, svg: any, onSpeechEnd: () => void): void {
-
     // Set up synthesis options if needed
     // const ssml = SpeechSDK.SpeechSynthesisVoiceName.enUSJessieRUS;
     // const audioConfig = SpeechSDK.AudioConfig.fromDefaultSpeakerOutput();
@@ -134,13 +137,20 @@ export class AzureSpeechService {
           }, duration);
         });
       }
-      this.visemes_arr = [];
-      this.speechConfig.close();
+      // this.visemes_arr = [];
+      // this.speechConfig.close();
     }, (error: any) => {
       console.error('Speech synthesis failed:', error);
       this.visemes_arr = [];
       this.speechConfig.close();
     });
+  }
+
+  stop() {
+    if (this.synthesizer) {
+      this.player.mute();
+      console.log(this.player)
+    }
   }
 
   getVisemeIds() {
@@ -169,7 +179,7 @@ export class AzureSpeechService {
     this.recognizer = new SpeechSDK.SpeechRecognizer(this.speechConfig, audioConfig);
 
     // Listen for audio events
-    this.recognizer.recognized = (sender, event) => {
+    this.recognizer.recognized = (sender: any, event: any) => {
       if (event.result.reason === SpeechSDK.ResultReason.RecognizedSpeech) {
         console.log('Recognized Text:', event.result.text);
 

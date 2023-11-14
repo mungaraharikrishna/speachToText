@@ -121,6 +121,10 @@ export class AzureAnimatedAvatarComponent {
     this.speechService.getVisemeIds();
   }
 
+  stop() {
+    this.speechService.stop();
+  }
+
   startRecognition(): void {
     this.speechService.startRecognition();
   }
