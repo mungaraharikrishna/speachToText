@@ -1,0 +1,3 @@
+<button class="btn btn-primary mx-2" (click)="startScreenCapture()">Start Screen Capture</button>
+<button class="btn btn-outline-primary my-2" (click)="captureScreenshot()">Capture Screenshot</button>
+<img class="d-block img img-fluid" [src]="imageUrl" alt="image" width="250" height="250" *ngIf="imageUrl">

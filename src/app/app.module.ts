@@ -19,6 +19,7 @@ import { AzureAnimatedAvatarComponent } from './azure-animated-avatar/azure-anim
 import { HttpClientModule } from '@angular/common/http';
 import { ThreeAvatarComponent } from './three-avatar/three-avatar.component';
 import { StreamingAvatarComponent } from './streaming-avatar/streaming-avatar.component';
+import { WebRtcComponent } from './web-rtc/web-rtc.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { StreamingAvatarComponent } from './streaming-avatar/streaming-avatar.co
     AnimatedAvatarComponent,
     AzureAnimatedAvatarComponent,
     ThreeAvatarComponent,
-    StreamingAvatarComponent
+    StreamingAvatarComponent,
+    WebRtcComponent
   ],
   imports: [
     BrowserModule,

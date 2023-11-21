@@ -8,6 +8,7 @@ import { AzureAnimatedAvatarComponent } from './azure-animated-avatar/azure-anim
 import { ThreeAvatarComponent } from './three-avatar/three-avatar.component';
 import { VoiceRecorderComponent } from './voice-recorder/voice-recorder.component';
 import { StreamingAvatarComponent } from './streaming-avatar/streaming-avatar.component';
+import { WebRtcComponent } from './web-rtc/web-rtc.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'speech-to-textv1', pathMatch: 'full' },
@@ -18,6 +19,7 @@ const routes: Routes = [
   { path: 'azure-avatar', component: AzureAnimatedAvatarComponent },
   { path: 'streaming-avatar', component: StreamingAvatarComponent },
   { path: 'three-avatar', component: ThreeAvatarComponent },
+  { path: 'webRTC', component: WebRtcComponent },
 ];
 
 @NgModule({

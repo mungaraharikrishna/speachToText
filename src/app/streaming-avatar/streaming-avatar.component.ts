@@ -37,7 +37,7 @@ export class StreamingAvatarComponent {
     this.stopAllStreams();
     this.closePC();
     let sendObj = {
-      source_url: 'https://naction.in/wp-content/uploads/2022/07/Neha-Batham.jpg'
+      source_url: 'https://vincifunstoqa.blob.core.windows.net/test/thumbnail.jpeg'
     }
     this.apiService.createConnection(sendObj).subscribe(async res => {
       console.log(res)
